@@ -1,10 +1,11 @@
 #include <iostream>
+#include "mdapplication.h"
 
 using namespace std;
 
 int main()
 {
-    cout << "blabla" << endl;
+    MDApplication app;
     cout << "Hello World!" << endl;
     return 0;
 }
