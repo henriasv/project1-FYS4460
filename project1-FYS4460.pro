@@ -7,13 +7,23 @@ SOURCES += main.cpp \
     particle.cpp \
     cell.cpp \
     mdsystem.cpp \
-    mdapplication.cpp
+    mdapplication.cpp \
+    outputmd.cpp \
+    integrator.cpp \
+    velocityverlet.cpp \
+    interparticleforce.cpp \
+    lennardjones.cpp
 
 HEADERS += \
     particle.h \
     cell.h \
     mdsystem.h \
-    mdapplication.h
+    mdapplication.h \
+    outputmd.h \
+    integrator.h \
+    velocityverlet.h \
+    interparticleforce.h \
+    lennardjones.h
 
 unix|win32: LIBS += -larmadillo
 

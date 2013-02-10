@@ -12,7 +12,7 @@ public:
     Cell(vec3 corner);
     vector <Particle*> particles;
     void add(Particle*);
-    Particle* pop();
+    Particle* pop(int index);
     int size();
 
     vec3 corner;
