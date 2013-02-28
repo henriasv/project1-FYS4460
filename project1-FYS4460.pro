@@ -3,6 +3,8 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
+#QMAKE_CXXFLAGS += -fpermissive
+
 SOURCES += main.cpp \
     particle.cpp \
     cell.cpp \
@@ -12,7 +14,8 @@ SOURCES += main.cpp \
     integrator.cpp \
     velocityverlet.cpp \
     interparticleforce.cpp \
-    lennardjones.cpp
+    lennardjones.cpp \
+    measurements.cpp
 
 HEADERS += \
     particle.h \
@@ -23,9 +26,12 @@ HEADERS += \
     integrator.h \
     velocityverlet.h \
     interparticleforce.h \
-    lennardjones.h
+    lennardjones.h \
+    measurements.h
 
-unix|win32: LIBS += -larmadillo
+#unix|win32: LIBS += -larmadillo
 
 unix: CONFIG += link_pkgconfig
-unix: PKGCONFIG += libconfig++
+unix: CONFIG += larmadillo
+#unix: PKGCONFIG += libconfig++
+

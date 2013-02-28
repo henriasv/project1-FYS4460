@@ -5,6 +5,7 @@ Particle::Particle()
     r.zeros();
     v.zeros();
     F.zeros();
+    m = 1;
     type = "Ar";
 }
 
@@ -20,4 +21,17 @@ void Particle::setR(double x, double y, double z)
     r(0) = x; r(1) = y; r(2) = z;
 }
 
+void Particle::setV(double vx, double vy, double vz)
+{
+    v(0) = vx; v(1) = vy; v(2) = vz;
+}
 
+void Particle::setV(vec3 V)
+{
+    v = V;
+}
+
+double Particle::getEk()
+{
+    return 0.5*m*(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]);
+}

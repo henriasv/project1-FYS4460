@@ -3,6 +3,7 @@
 #include <vector>
 #include "mdsystem.h"
 #include "particle.h"
+#include "measurements.h"
 
 using namespace std;
 class Integrator
@@ -17,6 +18,8 @@ public:
     double t;
     double dt;
     double T;
+
+    Measurements* measure;
 };
 
 #endif // INTEGRATOR_H

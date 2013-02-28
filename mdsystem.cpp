@@ -8,7 +8,7 @@ MDSystem::MDSystem(Config &cfg)
 MDSystem::MDSystem()
 {
     // This is to come from config file!
-    string outPath = "/home/henrik/NumericalData/FYS4460/test/";
+    string outPath = "/scratch/henriasv/NumericalData/FYS4460/test7/";
     output.open(outPath);
 
     force = new LennardJones();
@@ -16,6 +16,7 @@ MDSystem::MDSystem()
     NxFCC = 8; NyFCC = 8, NzFCC = 8;
     b = 5.268/3.405; // b'/sigma
     L = NxFCC* b;
+    //T0 = 100;
     r_crit = 3;
     Nx = (int) (NxFCC*b/r_crit);
     Ny = (int) (NyFCC*b/r_crit);
@@ -73,10 +74,14 @@ void MDSystem::createParticlesFCC() {
                 tmp2->setR(b*i+b/2, b*j+b/2, b*k);
                 tmp3->setR(b*i, b*j+b/2, b*k+b/2);
                 tmp4->setR(b*i+b/2, b*j, b*k+b/2);
-                tmp1->v(0) = 5;
-                tmp2->v(0) = -5;
-                tmp3->v(1) = 5;
-                tmp4->v(1) = -5;
+                //tmp1->setV(randn(3));
+                //tmp2->setV(randn(3));
+                //tmp3->setV(randn(3));
+                //tmp4->setV(randn(3));
+                tmp1->setV(0, 0, 1);
+                tmp2->setV(0, 0, 1);
+                tmp3->setV(0, 0, 1);
+                tmp4->setV(0, 0, 1);
                 particles.push_back(tmp1);
                 particles.push_back(tmp2);
                 particles.push_back(tmp3);
@@ -88,7 +93,7 @@ void MDSystem::createParticlesFCC() {
 
 void MDSystem::fillCells()
 {
-    for (uint m = 0; m<particles.size(); m++) {
+    for (unsigned int m = 0; m<particles.size(); m++) {
         int i = (int) (particles[m]->r(0)/l);
         int j = (int) (particles[m]->r(1)/l);
         int k = (int) (particles[m]->r(2)/l);
@@ -102,7 +107,7 @@ void MDSystem::fillCellsAlternate()
     for (int i = 0; i<Nx; i++) {
         for (int j = 0; j<Ny; j++) {
             for (int k = 0; k<Nz; k++) {
-                for (uint m = 0; m<particles.size(); m++) {
+                for (unsigned int m = 0; m<particles.size(); m++) {
                     if  (
                             particles[m]->r(0) >= i*l
                         &&  particles[m]->r(0) < (i+1)*l
@@ -139,7 +144,7 @@ void MDSystem::calculateForces()
 
 // Insert modulo operator in looping to include periodic boundary!
 {
-    cout << "Started calculating forces" << endl;
+    //cout << "Started calculating forces" << endl;
     setPositionsPeriodic();
     updateCells();
     vec3 correction;
@@ -170,9 +175,9 @@ void MDSystem::calculateForces()
                     }
                 }
             }
-            cout << "j= " << j << endl;
+            //cout << "j= " << j << endl;
         }
-        cout << "i= " << i << endl;
+        //cout << "i= " << i << endl;
     }
 }
 
@@ -244,7 +249,7 @@ void MDSystem::outputVMD()
 {
     ostringstream tmp; tmp << particles.size() << "\n" << "comment" << "\n";
     output.VMD(tmp.str());
-    for (uint m = 0; m<particles.size(); m++) {
+    for (unsigned int m = 0; m<particles.size(); m++) {
         output.VMD(particles[m]->VMDString());
     }
 }

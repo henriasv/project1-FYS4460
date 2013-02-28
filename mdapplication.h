@@ -4,10 +4,11 @@
 #include "mdsystem.h"
 #include "integrator.h"
 #include <iostream>
-#include <libconfig.h++>
+//#include <libconfig.h++>
 #include "velocityverlet.h"
 
 using namespace std;
+class Config;
 
 class MDApplication
 {
@@ -17,7 +18,7 @@ public:
 
     string outFileVMD;
 
-    Config cfg;
+    Config* cfg;
     MDSystem* system;
     Integrator* integrator;
 };

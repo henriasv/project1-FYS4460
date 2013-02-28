@@ -17,6 +17,7 @@ public:
      * @return Force on particle 1 from particle 2
      */
     virtual vec3 calculate(Particle* p1, Particle* p2, vec3 &correction) = 0;
+    virtual double energy(Particle* p1, Particle* p2, vec3 &correction) = 0;
     vec3 r;
 };
 

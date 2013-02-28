@@ -3,12 +3,14 @@
 
 #include "cell.h"
 #include "particle.h"
-#include <libconfig.h++>
+//#include <libconfig.h++>
 #include "outputmd.h"
 #include "interparticleforce.h"
 #include "lennardjones.h"
 
-using namespace libconfig;
+class Config;
+
+//using namespace libconfig;
 
 class MDSystem
 {
