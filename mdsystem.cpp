@@ -8,7 +8,7 @@ MDSystem::MDSystem(Config &cfg)
 MDSystem::MDSystem()
 {
     // This is to come from config file!
-    string outPath = "/scratch/henriasv/NumericalData/FYS4460/test7/";
+    string outPath = "/scratch/henriasv/NumericalData/FYS4460/state/";
     output.open(outPath);
 
     force = new LennardJones();
@@ -74,20 +74,36 @@ void MDSystem::createParticlesFCC() {
                 tmp2->setR(b*i+b/2, b*j+b/2, b*k);
                 tmp3->setR(b*i, b*j+b/2, b*k+b/2);
                 tmp4->setR(b*i+b/2, b*j, b*k+b/2);
-                //tmp1->setV(randn(3));
-                //tmp2->setV(randn(3));
-                //tmp3->setV(randn(3));
-                //tmp4->setV(randn(3));
-                tmp1->setV(0, 0, 1);
-                tmp2->setV(0, 0, 1);
-                tmp3->setV(0, 0, 1);
-                tmp4->setV(0, 0, 1);
+                double fac = 4.0;
+                tmp1->setV(randn(3)*fac);
+                tmp2->setV(randn(3)*fac);
+                tmp3->setV(randn(3)*fac);
+                tmp4->setV(randn(3)*fac);
+                /*
+                tmp1->setV(1, 0, 0);
+                tmp2->setV(1, 0, 0);
+                tmp3->setV(1, 0, 0);
+                tmp4->setV(1, 0, 0);
+                //*/
                 particles.push_back(tmp1);
                 particles.push_back(tmp2);
                 particles.push_back(tmp3);
                 particles.push_back(tmp4);
             }
         }
+    }
+
+    // Removing system drift.
+    double vx_mean; double vy_mean; double vz_mean; int n = particles.size();
+    for (int i = 0; i<particles.size(); i++) {
+        vx_mean += particles[i]->v[0]/n;
+        vy_mean += particles[i]->v[1]/n;
+        vz_mean += particles[i]->v[2]/n;
+    }
+    for (int i = 0; i<particles.size(); i++) {
+        particles[i]->v[0] -= vx_mean;
+        particles[i]->v[1] -= vy_mean;
+        particles[i]->v[2] -= vz_mean;
     }
 }
 
@@ -151,8 +167,11 @@ void MDSystem::calculateForces()
     for (int i = 0; i<Nx; i++) {
         for (int j = 0; j<Ny; j++) {
             for(int k = 0; k<Nz; k++) {
+                cout << cells[i][j][k]->size();
                 for (int m = 0; m<cells[i][j][k]->particles.size(); m++) {
                     cells[i][j][k]->particles[m]->F.zeros();
+                    cells[i][j][k]->particles[m]->Ep = 0;
+
                 // Calculate force on each particle from neighbor cell particles
                     for (int ii = -1; ii<=1; ii++) {
                         for (int jj = -1; jj<=1; jj++) {
@@ -160,13 +179,16 @@ void MDSystem::calculateForces()
                                 int iii = (i+ii+Nx)%Nx;
                                 int jjj = (j+jj+Ny)%Ny;
                                 int kkk = (k+kk+Nz)%Nz;
+                                //cout << iii << jjj << kkk << endl;
                                 correction(0) = -L*((i+ii)==-1) + L*(i+ii==Nx);
                                 correction(1) = -L*((j+jj)==-1) + L*(j+jj==Ny);
                                 correction(2) = -L*((k+kk)==-1) + L*(k+kk==Nz);
                                 for (int mm = 0; mm<cells[iii][jjj][kkk]->particles.size(); mm++) {
-                                    if (!(ii==0 && jj==0 && kk==0 && mm==m)) {
+                                    if (!((ii==0) && (jj==0) && (kk==0) && (mm==m))) {
                                         cells[i][j][k]->particles[m]->F = cells[i][j][k]->particles[m]->F +
                                             force->calculate(cells[i][j][k]->particles[m], cells[iii][jjj][kkk]->particles[mm], correction);
+                                        cells[i][j][k]->particles[m]->Ep =cells[i][j][k]->particles[m]->Ep +
+                                            0.5*force->energy(cells[i][j][k]->particles[m], cells[iii][jjj][kkk]->particles[mm], correction);
 
                                     }
                                 }
@@ -212,11 +234,15 @@ void MDSystem::updateCells()
     for (int i = 0; i<Nx; i++)  {
         for (int j = 0; j<Ny; j++) {
             for (int k = 0; k<Nz; k++) {
-                for (int m = 0; m < cells[i][j][k]->particles.size(); m++) {
+                int m = 0;
+                while (m < cells[i][j][k]->particles.size()) {
+                //(int m = 0; m < cells[i][j][k]->particles.size(); m++) {
                     if (!belongToCell(cells[i][j][k]->particles[m], i, j, k)) {
                         putInCell(cells[i][j][k]->pop(m));
+                        m --;
                         counter ++;
                     }
+                    m++;
                 }
             }
         }
@@ -230,13 +256,13 @@ bool MDSystem::belongToCell(Particle* p, int i, int j, int k)
     return (p->r(0)>=lx && p->r(0)<lx+l && p->r(1)>=ly && p->r(1)<ly+l && p->r(2)>=lz && p->r(2)<lz+l);
 }
 
-void MDSystem::putInCell(Particle *p)
+void MDSystem::putInCell(Particle* p)
 {
     int i = (int) (p->r(0)/l);
     int j = (int) (p->r(1)/l);
     int k = (int) (p->r(2)/l);
     if (i<0 || i>=Nx || j<0 || j>=Ny || k<0 || k>=Nz) {
-        cout << "Trying to put particle in cell (" << i << ", " << ", " << j << ", " << k <<")" << endl;
+        cout << "Trying to put particle in cell (" << i << ", " << j << ", " << k <<")" << endl;
         cout << "This is illegal" << endl;
         exit(1);
     }

@@ -3,7 +3,11 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-#QMAKE_CXXFLAGS += -fpermissive
+QMAKE_CXXFLAGS += -fpermissive
+
+release {
+DEFINES += ARMA_NO_DEBUG
+}
 
 SOURCES += main.cpp \
     particle.cpp \

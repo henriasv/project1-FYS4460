@@ -4,8 +4,8 @@ Integrator::Integrator(MDSystem* _system, Config &cfg)
 {
 
     t = 0;
-    dt = 0.05;
-    T = 8;
+    dt = 0.002;
+    T = 0.01;
     system = _system;
     measure = new Measurements(system);
     particles = system->particles;

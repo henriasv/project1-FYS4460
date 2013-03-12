@@ -6,13 +6,14 @@ Particle::Particle()
     v.zeros();
     F.zeros();
     m = 1;
+    Ep = 0;
     type = "Ar";
 }
 
 string Particle::VMDString()
 {
     ostringstream tmp;
-    tmp << type << " " << r(0) << " " << r(1) <<" " << r(2) << "\n";
+    tmp << type << " " << r(0) << " " << r(1) <<" " << r(2) << " " << v(0) << " " << v(1) << " " << v(2) << "\n";
     return tmp.str();
 }
 
@@ -31,7 +32,16 @@ void Particle::setV(vec3 V)
     v = V;
 }
 
+void Particle::scaleV(double fac) {
+    v = v*fac;
+}
+
 double Particle::getEk()
 {
     return 0.5*m*(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]);
+}
+
+double Particle::getEp()
+{
+    return Ep;
 }

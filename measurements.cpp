@@ -2,7 +2,7 @@
 
 Measurements::Measurements(MDSystem* _system)
 {
-    filenameMeasures = "/scratch/henriasv/NumericalData/FYS4460/test7/measures.dat";
+    filenameMeasures = "/scratch/henriasv/NumericalData/FYS4460/state/measures.dat";
     outfileMeasures.open(filenameMeasures.c_str());
     outfileMeasures << "% t " << "n_t " << "T " << "Etot " << "Ep " << "Ek " << "p " << endl;
     t = 0;
@@ -42,9 +42,7 @@ void Measurements::measureEp()
     offset.zeros();
     Ep = 0;
     for (int i = 0; i<particles.size(); i++) {
-        for(int j = i+1; j<particles.size(); j++) {
-            Ep += system->force->energy(particles[i], particles[j], offset);
-        }
+        Ep += particles[i]->getEp();
     }
 }
 

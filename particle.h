@@ -26,6 +26,9 @@ public:
     string type;
 
     double m;
+    double Ep;
+    double getEp();
+    void scaleV(double fac);
 };
 
 #endif // PARTICLE_H
