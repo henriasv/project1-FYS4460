@@ -3,9 +3,11 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char **argv)
 {
-    MDApplication app;
+    string config_path = argv[1];
+    MDApplication app(config_path);
+    app.run();
     cout << "Hello World!" << endl;
     return 0;
 }

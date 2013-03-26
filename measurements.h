@@ -8,13 +8,13 @@ class Measurements
 {
 public:
     Measurements(MDSystem*);
+    ~Measurements();
     void measureAll(double t, int n_t);
     void measureEk();
     void measureEp();
     void measureEtot();
     void measurep();
     void measureT();
-
     void outputAll();
 
     // The last measurements done, and on which time and timestep
@@ -25,6 +25,9 @@ public:
     double Etot;
     double t;
     double n_t;
+    double L;
+    double V;
+    int num_particles;
 
     vector<Particle*> particles;
     string filenameMeasures;

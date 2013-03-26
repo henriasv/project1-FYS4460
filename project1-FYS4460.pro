@@ -3,7 +3,7 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-QMAKE_CXXFLAGS += -fpermissive
+#QMAKE_CXXFLAGS += -fpermissive
 
 release {
 DEFINES += ARMA_NO_DEBUG
@@ -19,7 +19,10 @@ SOURCES += main.cpp \
     velocityverlet.cpp \
     interparticleforce.cpp \
     lennardjones.cpp \
-    measurements.cpp
+    measurements.cpp \
+    thermostat.cpp \
+    berendsen.cpp \
+    dummythermostat.cpp
 
 HEADERS += \
     particle.h \
@@ -31,11 +34,14 @@ HEADERS += \
     velocityverlet.h \
     interparticleforce.h \
     lennardjones.h \
-    measurements.h
+    measurements.h \
+    thermostat.h \
+    berendsen.h \
+    dummythermostat.h
 
 #unix|win32: LIBS += -larmadillo
 
 unix: CONFIG += link_pkgconfig
 unix: CONFIG += larmadillo
-#unix: PKGCONFIG += libconfig++
+unix: PKGCONFIG += libconfig++
 

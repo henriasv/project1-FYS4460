@@ -8,7 +8,7 @@
 class VelocityVerlet : public Integrator
 {
 public:
-    VelocityVerlet(MDSystem* _system, Config &cfg);
+    VelocityVerlet(MDSystem* _system, Config* cfg);
     virtual void step();
 };
 

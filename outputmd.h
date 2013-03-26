@@ -12,11 +12,9 @@ public:
     OutputMD();
     ~OutputMD();
     void open(string);
+    void close();
 
     void VMD(string);
-
-    // Filenames
-    string VMDName;
 
     // Ofstreams
     ofstream outFileVMD;

@@ -2,11 +2,6 @@
 
 OutputMD::OutputMD()
 {
-
-    // Setting filenames
-    VMDName = "/out.xyz";
-
-
 }
 
 OutputMD::~OutputMD()
@@ -22,5 +17,10 @@ void OutputMD::VMD(string s)
 void OutputMD::open(string path)
 {
     // Creationg ofstreams
-    outFileVMD.open((path + VMDName).c_str());
+    outFileVMD.open((path).c_str());
+}
+
+void OutputMD::close()
+{
+    outFileVMD.close();
 }

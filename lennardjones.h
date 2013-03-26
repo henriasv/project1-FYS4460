@@ -13,6 +13,7 @@ public:
     LennardJones();
     virtual vec3 calculate(Particle* p1, Particle* p2, vec3 &correction);
     virtual double energy(Particle* p1, Particle* p2, vec3 &correction);
+    virtual double pressure(Particle* p1, Particle* p2, vec3 &correction);
 };
 
 #endif // LENNARDJONES_H
